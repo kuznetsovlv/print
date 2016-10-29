@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	(0, _index2.default)(str, 'noStyles,final');
 
-	(0, _index2.default)((0, _index2.default)('test $b;', 'final', { b: 12 }), 'final', { b: 12 });
+	(0, _index2.default)((0, _index2.default)('test $b;', 'final', { b: 12 }, 'noVars'), 'final,encoding=utf8,test=2', { b: 12 });
 
 /***/ },
 /* 1 */
@@ -138,11 +138,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function print() {
 		var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-		var arg2 = arguments[1];
-		var arg3 = arguments[2];
 
-		var vars = (0, _getVars2.default)(arg2, arg3);
-		var options = (0, _getOptions2.default)(arg2, arg3);
+		for (var _len = arguments.length, rest = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+			rest[_key - 1] = arguments[_key];
+		}
+
+		var vars = (0, _getVars2.default)(rest);
+		var options = (0, _getOptions2.default)(rest);
 
 		var _options$noStyles = options.noStyles,
 		    noStyles = _options$noStyles === undefined ? false : _options$noStyles,
@@ -266,17 +268,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-	var isObj = function isObj(v) {
-		return (typeof v === 'undefined' ? 'undefined' : _typeof(v)) === 'object' ? v : undefined;
-	};
-
-	exports.default = function (v1, v2) {
-		return isObj(v1) || isObj(v2) || {};
+	exports.default = function () {
+	  var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	  return params.reduce(function () {
+	    var o = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	    var p = arguments[1];
+	    return (typeof p === 'undefined' ? 'undefined' : _typeof(p)) === 'object' ? _extends({}, o, p) : o;
+	  }, {});
 	};
 
 /***/ },
@@ -291,14 +296,55 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var strToOpts = function strToOpts(str) {
-		return typeof str === 'string' ? str.split(',').reduce(function (o, key) {
-			o[key] = true;return o;
-		}, {}) : {};
-	};
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-	exports.default = function (v1, v2) {
-		return _extends({}, strToOpts(v1), strToOpts(v2));
+	function parseStr() {
+		var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+		switch (str) {
+			case 'true':
+				return true;
+			case 'false':
+				return false;
+			case 'undefined':
+				return undefined;
+			case 'null':
+				return null;
+			case 'NaN':
+				return NaN;
+		}
+
+		if (str && /^\d*\.?\d*$/.test(str)) return parseFloat(str);
+
+		return str;
+	}
+
+	function strToObj() {
+		var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+		return str.split(',').reduce(function (o, key) {
+			if (/^\w+=\w*$/.test(key)) {
+				var _key$split = key.split('='),
+				    _key$split2 = _slicedToArray(_key$split, 2),
+				    k = _key$split2[0],
+				    v = _key$split2[1];
+
+				o[k] = parseStr(v);
+			} else {
+				o[key] = true;
+			}
+
+			return o;
+		}, {});
+	}
+
+	exports.default = function () {
+		var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+		return params.reduce(function () {
+			var o = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+			var p = arguments[1];
+			return typeof p === 'string' ? _extends({}, o, strToObj(p)) : o;
+		}, {});
 	};
 
 /***/ }

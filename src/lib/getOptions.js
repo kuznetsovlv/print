@@ -1,7 +1,29 @@
-const strToOpts  = (str) => {
-	return typeof str === 'string' ? str.split(',').reduce((o, key) => {o[key] = true; return o;}, {}) : {};
-};
+function parseStr (str = '') {
+	switch (str) {
+		case 'true': return true;
+		case 'false': return false;
+		case 'undefined': return undefined;
+		case 'null': return null;
+		case 'NaN': return NaN;
+	}
 
-export default (v1, v2) => {
-	return {...strToOpts(v1), ...strToOpts(v2)};
-};
+	if (str && /^\d*\.?\d*$/.test(str))
+		return parseFloat(str);
+
+	return str;
+}
+
+function strToObj  (str = '') {
+	return str.split(',').reduce((o, key) => {
+		if (/^\w+=\w*$/.test(key)) {
+			const [k, v] = key.split('=');
+			o[k] = parseStr(v);
+		} else {
+			o[key] = true;
+		}
+
+		return o;
+	}, {});
+}
+
+export default (params = []) => params.reduce((o = {}, p) => {return typeof p === 'string' ? {...o, ...strToObj(p)} : o}, {});

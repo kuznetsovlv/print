@@ -3,9 +3,9 @@ import styles		from '../lib/styles';
 import getVars		from '../lib/getVars';
 import getOptions	from '../lib/getOptions';
 
-function print (str = '', arg2, arg3) {
-	const vars = getVars(arg2, arg3);
-	const options = getOptions(arg2, arg3);
+function print (str = '', ...rest) {
+	const vars = getVars(rest);
+	const options = getOptions(rest);
 
 	const {noStyles = false, noVars = false, final = false, encoding = 'utf8'} = options;
 
