@@ -62,9 +62,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var str = '%fBlue,bgGreen;Blue text, green background. %fRed;red text%bgBlue;, blue background.\\%bgRed; This must be not changed.';
+	var str = '@fBlue,bgGreen;Blue text, green background. @fRed;red text@bgBlue;, blue background.\\@bgRed; This must be not changed. Printing variable: $value;$end;';
 
-	(0, _index2.default)(str);
+	(0, _index2.default)(str, { value: 12, end: '\n' });
 
 	(0, _index2.default)('test $a;', { a: 8 }, 'final');
 
@@ -136,6 +136,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	/**
+	 * Method for formated printing.
+	 * @params {string} str - printed string with format marks.
+	 * @param {array} [...rest] - array of objects with variables and stringsof options.
+	 * @returns {number} - number of printed bites.
+	 */
 	function print() {
 		var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
@@ -158,13 +164,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		str = '' + str;
 
-		if (!noStyles) str = str.replace(/\\?%\w+,?\w*;/g, function (v) {
+		if (!noStyles) str = str.replace(/\\?@\w+,?\w*;/g, function (v) {
 			return v.substr(0, 1) === '\\' ? v.substr(1) : v.substring(1, v.length - 1).split(',').map(function (v) {
 				return _styles2.default[v] || '';
 			}).join('');
 		});
 
-		if (!noVars) str = str.replace(/\\?\$\w;/, function (v) {
+		if (!noVars) str = str.replace(/\\?\$\w+;/g, function (v) {
 			return v.substr(0, 1) === '\\' ? v.substr(1) : vars[v.substring(1, v.length - 1)] || v;
 		});
 

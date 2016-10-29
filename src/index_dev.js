@@ -1,8 +1,8 @@
 import print	from './index';
 
-const str = '%fBlue,bgGreen;Blue text, green background. %fRed;red text%bgBlue;, blue background.\\%bgRed; This must be not changed.';
+const str = '@fBlue,bgGreen;Blue text, green background. @fRed;red text@bgBlue;, blue background.\\@bgRed; This must be not changed. Printing variable: $value;$end;';
 
-print(str);
+print(str, {value: 12, end: '\n'});
 
 print('test $a;',{a: 8}, 'final');
 

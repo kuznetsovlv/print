@@ -2,7 +2,7 @@
   "name": "print-str",
   "version": "1.0.0",
   "description": "Printing method",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "clear": "rm -rf dist",
     "build": "npm run clear && NODE_ENV=product webpack -p",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "kuznetsov@home:/opt/git/print.git"
+    "url": "git@github.com:kuznetsovlv/print.git"
   },
   "keywords": [
     "print",
