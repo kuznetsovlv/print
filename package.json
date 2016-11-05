@@ -1,6 +1,6 @@
 {
   "name": "print-str",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Printing method",
   "main": "dist/index.js",
   "scripts": {
