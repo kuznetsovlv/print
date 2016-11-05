@@ -18,7 +18,7 @@ function print (str = '', ...rest) {
 	str = `${str}`;
 
 	if (!noStyles)
-		str = str.replace(/\\?@\w+,?\w*;/g, (v) => {
+		str = str.replace(/\\?@\w+(?:,?\w*)*;/g, (v) => {
 			return v.substr(0, 1) === '\\' ? v.substr(1) : v.substring(1, v.length - 1).split(',').map(v => styles[v] || '').join('')
 		});
 
